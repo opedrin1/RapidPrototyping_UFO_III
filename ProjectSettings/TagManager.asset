@@ -47,5 +47,11 @@ TagManager:
   - name: Player
     uniqueID: 2388486423
     locked: 0
+  - name: Obstacles
+    uniqueID: 3420995887
+    locked: 0
+  - name: Food
+    uniqueID: 3465532127
+    locked: 0
   m_RenderingLayers:
   - Default
