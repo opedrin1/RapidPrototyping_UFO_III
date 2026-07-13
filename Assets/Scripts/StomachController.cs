@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum BodyPhase
 {
@@ -17,7 +18,7 @@ public class StomachController : MonoBehaviour
     
     [SerializeField] private float drainPerSecond = 10f;
 
-    [Header("Phase Thresholds (upper bound, inclusive)")]
+    [Header("Phase Thresholds")]
     [SerializeField] private float skinnyMax = 40f;
     [SerializeField] private float fitMax = 60f;
     [SerializeField] private float overweightMax = 70f;
@@ -28,6 +29,11 @@ public class StomachController : MonoBehaviour
     [SerializeField] private float fitSpeed = 2f;
     [SerializeField] private float overweightSpeed = 1f;
     [SerializeField] private float obeseSpeed = 0.3f;
+
+    [Header("Lose Condition")]
+    public UnityEvent onStarved;
+
+    private bool _hasStarved;
 
     public float StomachValue => stomachValue;
     public BodyPhase CurrentPhase { get; private set; }
@@ -43,13 +49,21 @@ public class StomachController : MonoBehaviour
     {
         stomachValue = Mathf.Clamp(stomachValue - drainPerSecond * Time.deltaTime, 0f, 100f);
         RecalculatePhaseAndSpeed();
+        CheckForStarvation();
     }
-
-    // call when the player eats something - raises the bar by the food's FillAmount.
+    
     public void Eat(float fillAmount)
     {
         stomachValue = Mathf.Clamp(stomachValue + fillAmount, 0f, 100f);
         RecalculatePhaseAndSpeed();
+    }
+
+    private void CheckForStarvation()
+    {
+        if (_hasStarved || stomachValue > 0f) return;
+
+        _hasStarved = true;
+        onStarved?.Invoke();
     }
 
     private void RecalculatePhaseAndSpeed()
