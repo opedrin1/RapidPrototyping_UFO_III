@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ObstacleMover : MonoBehaviour
+public class FoodMover : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
     
@@ -8,12 +8,12 @@ public class ObstacleMover : MonoBehaviour
 
     private float _destroyY;
     
-    public void Initialize(int startLane, int widthInLanes)
+    public void Initialize(int lane)
     {
         ActiveLaneItems.Register(new ActiveLaneItems.Item
         {
-            StartLane = startLane,
-            WidthInLanes = widthInLanes,
+            StartLane = lane,
+            WidthInLanes = 1,
             ItemTransform = transform
         });
     }

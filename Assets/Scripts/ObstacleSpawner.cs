@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
@@ -23,9 +24,13 @@ public class ObstacleSpawner : MonoBehaviour
     [Header("Spawn Position")]
     [SerializeField] private float spawnBuffer = 1f;
 
+    [Header("Food Avoidance")]
+    [SerializeField] private float minLaneGap = 1.5f;
+
     private float _timer;
     private float _nextSpawnDelay;
     private float _spawnY;
+    private readonly List<int> validStartLanesBuffer = new List<int>();
 
     private void Start()
     {
@@ -61,11 +66,25 @@ public class ObstacleSpawner : MonoBehaviour
         if (chosen.prefab == null) return;
 
         int maxStartLane = trackConfig.MaxStartLane(chosen.widthInLanes);
-        int startLane = Random.Range(0, maxStartLane + 1); // inclusive upper bound
+
+        validStartLanesBuffer.Clear();
+        for (int start = 0; start <= maxStartLane; start++)
+        {
+            if (!ActiveLaneItems.IsBlocked(start, chosen.widthInLanes, _spawnY, minLaneGap))
+            {
+                validStartLanesBuffer.Add(start);
+            }
+        }
+
+        if (validStartLanesBuffer.Count == 0) return; // no safe spot this cycle, skip
+
+        int startLane = validStartLanesBuffer[Random.Range(0, validStartLanesBuffer.Count)];
 
         float x = trackConfig.GetGroupCenterX(startLane, chosen.widthInLanes);
         Vector3 spawnPos = new Vector3(x, _spawnY, 0f);
 
-        Instantiate(chosen.prefab, spawnPos, Quaternion.identity);
+        GameObject obj = Instantiate(chosen.prefab, spawnPos, Quaternion.identity);
+        ObstacleMover mover = obj.GetComponent<ObstacleMover>();
+        if (mover != null) mover.Initialize(startLane, chosen.widthInLanes);
     }
 }
