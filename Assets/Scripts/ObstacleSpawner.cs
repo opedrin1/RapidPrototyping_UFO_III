@@ -30,7 +30,7 @@ public class ObstacleSpawner : MonoBehaviour
     private float _timer;
     private float _nextSpawnDelay;
     private float _spawnY;
-    private readonly List<int> validStartLanesBuffer = new List<int>();
+    private readonly List<int> _validStartLanesBuffer = new List<int>();
 
     private void Start()
     {
@@ -43,7 +43,8 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void Update()
     {
-        _timer += Time.deltaTime;
+        float paceMultiplier = StomachController.Instance != null ? StomachController.Instance.PaceMultiplier : 1f;
+        _timer += Time.deltaTime * paceMultiplier;
 
         if (_timer >= _nextSpawnDelay)
         {
@@ -67,18 +68,18 @@ public class ObstacleSpawner : MonoBehaviour
 
         int maxStartLane = trackConfig.MaxStartLane(chosen.widthInLanes);
 
-        validStartLanesBuffer.Clear();
+        _validStartLanesBuffer.Clear();
         for (int start = 0; start <= maxStartLane; start++)
         {
             if (!ActiveLaneItems.IsBlocked(start, chosen.widthInLanes, _spawnY, minLaneGap))
             {
-                validStartLanesBuffer.Add(start);
+                _validStartLanesBuffer.Add(start);
             }
         }
 
-        if (validStartLanesBuffer.Count == 0) return; // no safe spot this cycle, skip
+        if (_validStartLanesBuffer.Count == 0) return; // no safe spot this cycle - skip
 
-        int startLane = validStartLanesBuffer[Random.Range(0, validStartLanesBuffer.Count)];
+        int startLane = _validStartLanesBuffer[Random.Range(0, _validStartLanesBuffer.Count)];
 
         float x = trackConfig.GetGroupCenterX(startLane, chosen.widthInLanes);
         Vector3 spawnPos = new Vector3(x, _spawnY, 0f);

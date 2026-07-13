@@ -153,9 +153,9 @@ MonoBehaviour:
   skinnyMax: 40
   fitMax: 60
   overweightMax: 70
-  skinnySpeed: 4.5
-  fitSpeed: 3
-  overweightSpeed: 1.5
+  skinnySpeed: 5
+  fitSpeed: 2
+  overweightSpeed: 1
   obeseSpeed: 0.5
   onStarved:
     m_PersistentCalls:
@@ -448,8 +448,8 @@ MonoBehaviour:
     widthInLanes: 3
   - prefab: {fileID: 2151954080441356687, guid: e769c7511741cd54b91a6d2a65f4ab06, type: 3}
     widthInLanes: 2
-  spawnIntervalMin: 2
-  spawnIntervalMax: 3
+  spawnIntervalMin: 4
+  spawnIntervalMax: 6
   spawnBuffer: 1
   minLaneGap: 1.5
 --- !u!4 &285816106
@@ -2387,10 +2387,10 @@ MonoBehaviour:
   - {fileID: 4280295021664615484, guid: e009aa66ebee01447bcaa6cb8e00a3eb, type: 3}
   - {fileID: 3012113029204789281, guid: d81c4ce069589054999394e4dc0ee37c, type: 3}
   - {fileID: 3453078768264419661, guid: d2ca122b3601cd043b94158ed1658ea4, type: 3}
-  spawnIntervalMin: 0.8
-  spawnIntervalMax: 1.8
+  spawnIntervalMin: 0.5
+  spawnIntervalMax: 0.8
   spawnBuffer: 1
-  minLaneGap: 1.5
+  minLaneGap: 2.5
 --- !u!1 &2082135517
 GameObject:
   m_ObjectHideFlags: 0

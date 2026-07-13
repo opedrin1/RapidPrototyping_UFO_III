@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public enum BodyPhase
 {
@@ -18,17 +19,17 @@ public class StomachController : MonoBehaviour
     
     [SerializeField] private float drainPerSecond = 10f;
 
-    [Header("Phase Thresholds")]
+    [Header("Phase Thresholds (upper bound, inclusive)")]
     [SerializeField] private float skinnyMax = 40f;
     [SerializeField] private float fitMax = 60f;
     [SerializeField] private float overweightMax = 70f;
     // Obese = anything above overweightMax, up to 100.
 
     [Header("World Speed Per Phase")]
-    [SerializeField] private float skinnySpeed = 3.5f;
+    [SerializeField] private float skinnySpeed = 5f;
     [SerializeField] private float fitSpeed = 2f;
     [SerializeField] private float overweightSpeed = 1f;
-    [SerializeField] private float obeseSpeed = 0.3f;
+    [SerializeField] private float obeseSpeed = 0.5f;
 
     [Header("Lose Condition")]
     public UnityEvent onStarved;
@@ -38,6 +39,12 @@ public class StomachController : MonoBehaviour
     public float StomachValue => stomachValue;
     public BodyPhase CurrentPhase { get; private set; }
     public float CurrentWorldSpeed { get; private set; }
+
+    // the Fit-phase speed, used elsewhere (RaceTimer, spawners) as the "1x normal pace" baseline
+    public float FitSpeed => fitSpeed;
+
+    // current speed relative to Fit: 1x at Fit, faster at Skinny, slower at Overweight/Obese
+    public float PaceMultiplier => fitSpeed > 0f ? CurrentWorldSpeed / fitSpeed : 1f;
 
     private void Awake()
     {
