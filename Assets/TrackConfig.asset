@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: TrackConfig
   m_EditorClassIdentifier: Assembly-CSharp::TrackConfig
   laneCount: 5
-  laneWidth: 2
+  laneWidth: 1.7
   trackCenterX: 0
-  obstacleEdgeMargin: 1
